@@ -1,0 +1,17 @@
+.layout_header{
+    top: 5px;
+    height: 25px;
+    border-bottom: dashed 2px  black;
+}
+
+.layout_main_body {
+    bottom: 5px;
+    height: fit-content;
+    border-bottom: dashed 2px black;
+}
+
+.layout_title {
+    top: 32px;
+    height: fit-content;
+    border-bottom: dashed 2px black;
+}

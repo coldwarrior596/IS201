@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knock Knock Joke Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-image: 
+                linear-gradient(45deg, #f0f8ff 25%, transparent 25%), 
+                linear-gradient(-45deg, #f0f8ff 25%, transparent 25%);
+            background-size: 50px 50px;
+            background-position: 0 0, 25px 25px; /* Offset for the second gradient */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #6d4f2d; /* Wood color */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            width: 260px; /* Making the door narrower */
+            height: 400px; /* Taller door */
+            position: relative;
+            border: 8px solid #4b2f18; /* Door frame color */
+        }
+
+        h1 {
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Door Handle (Knob) */
+        .door-handle {
+            position: absolute;
+            top: 50%; /* Center vertically */
+            right: 20px; /* Right side of the door */
+            transform: translateY(-50%); /* Correct vertical centering */
+            width: 20px;
+            height: 20px;
+            background-color: #a67c52; /* Handle color */
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Animation class for moving the box */
+        .move-box {
+            animation: moveAnimation 0.5s ease-in-out forwards;
+        }
+
+        /* Define the keyframe animation for the move */
+        @keyframes moveAnimation {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px); /* Move the box up */
+            }
+            100% {
+                transform: translateY(0); /* Return to original position */
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="door-handle"></div>
+        <h1>Wanna hear a joke?</h1>
+        <p id="jokeDisplay">Click the button below to start the joke!</p>
+        <button id="firstButton">Joke Generator</button>
+        <button id="secondButton" style="display:none;">Who's there?</button>
+        <button id="finalButton" style="display:none;">Show punchline</button>
+    </div>
+
+    <script>
+        // List of knock-knock jokes (including 20 additional ones)
+        const jokes = [
+            ["Atch", "Atch who? Bless you!"],
+            ["Alpaca", "Alpaca who? Alpaca the suitcase, you load up the car!"],
+            ["Harry", "Harry who? Harry up and answer the door!"],
+            ["Tank", "Tank who? You’re welcome!"],
+            ["Butter", "Butter who? Butter let me in, it's cold out here!"],
+            ["Irish", "Irish who? Irish you a merry Christmas!"],
+            ["Gorilla", "Gorilla who? Gorilla me a hamburger, I’m hungry!"],
+            ["Olive", "Olive who? Olive you and I miss you!"],
+            ["Canoe", "Canoe who? Canoe help me with something?"],
+            ["Wendy", "Wendy who? Wendy you gonna let me in?"],
+            ["Lettuce", "Lettuce who? Lettuce in, it's freezing out here!"],
+            ["Nobel", "Nobel who? Nobel... that's why I knocked!"],
+            ["Beak", "Beak who? Beak careful, the door is heavy!"],
+            ["Orange", "Orange who? Orange you glad I didn’t say banana?"],
+            ["Figs", "Figs who? Figs the doorbell, it’s broken!"],
+            ["Hawaii", "Hawaii who? I'm good. Hawaii you?"],
+            ["Ya", "Ya who? No thanks, I prefer Google!"],
+            ["Dishes", "Dishes who? Dishes the police, open up!"],
+            ["Canoe", "Canoe who? Canoe believe it's already 2024?"],
+            ["Boo", "Boo who? Don’t cry, it’s just a joke!"],
+            ["Hawaii", "Hawaii who? Hawaii you doing today?"],
+            ["Yoda", "Yoda who? Yo’ da best!"],
+            ["Double", "Double who? Double your pleasure, double your fun!"],
+            ["Vlad", "Vlad who? Vlad you open the door, it’s freezing out here!"],
+            ["Cow says", "Cow says who? Cow says moo!"],
+            ["Luke", "Luke who? Luke through the peephole and see!"],
+            ["Mikey", "Mikey who? Mikey mouse, of course!"],
+            ["Peas", "Peas who? Peas give me another chance!"],
+            ["Hawaii", "Hawaii who? Hawaii you doing? I'm fine, thanks for asking!"]
+        ];
+
+        let currentJoke = []; // Will hold the current joke parts
+        let usedJokes = []; // Keep track of used jokes
+
+        // Get the HTML elements
+        const jokeDisplay = document.getElementById('jokeDisplay');
+        const firstButton = document.getElementById('firstButton');
+        const secondButton = document.getElementById('secondButton');
+        const finalButton = document.getElementById('finalButton');
+        const container = document.querySelector('.container');
+
+        // Function to get a random joke and ensure no repeats
+        function getRandomJoke() {
+            if (jokes.length === 0) {
+                jokeDisplay.textContent = "All jokes have been told! Reload the page to start over.";
+                firstButton.style.display = 'none';
+                return null;
+            }
+
+            const randomIndex = Math.floor(Math.random() * jokes.length);
+            const selectedJoke = jokes[randomIndex];
+            jokes.splice(randomIndex, 1); // Remove the selected joke from the list
+            usedJokes.push(selectedJoke); // Keep track of the used joke
+            return selectedJoke;
+        }
+
+        // Event listener for the first "Knock knock" button
+        firstButton.addEventListener('click', () => {
+            // Select a random joke from the list
+            currentJoke = getRandomJoke();
+            if (!currentJoke) return; // No more jokes left
+
+            // Display "Knock knock"
+            jokeDisplay.textContent = "Knock knock";
+
+            // Hide the first button and show the second button
+            firstButton.style.display = 'none';
+            secondButton.style.display = 'inline-block';
+        });
+
+        // Event listener for the "Who's there?" button
+        secondButton.addEventListener('click', () => {
+            // Display the first part of the joke
+            jokeDisplay.textContent = `${currentJoke[0]} who?`;
+
+            // Hide the second button and show the final button
+            secondButton.style.display = 'none';
+            finalButton.style.display = 'inline-block';
+        });
+
+        // Event listener for the "Show punchline" button
+        finalButton.addEventListener('click', () => {
+            // Display the punchline
+            jokeDisplay.textContent = currentJoke[1];
+
+            // Reset the buttons for the next joke
+            finalButton.style.display = 'none';
+            firstButton.style.display = 'inline-block';
+        });
+    </script>
+</body>
+</html>

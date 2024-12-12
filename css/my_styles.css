@@ -1,0 +1,46 @@
+a:visited{
+    color: cornflowerblue;
+}
+a:link{
+    color: brown;
+}
+.heading{
+    font-style: bold;
+}
+body{
+    background-color: #D3D3D3;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.border{
+    padding-top: 8px;
+    border-bottom: solid 3px #555555;
+}
+
+.header{
+    text-align: center;
+    text-decoration: underline;
+}
+.subtitle{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    text-align: center;
+    font-size: medium;
+    font-style: italic;
+    color: rgb(57, 56, 56);
+}
+
+.container {
+    position: fixed;              /* Set the container's position to relative */
+    height: 50vh;                   /* Full viewport height */
+  }
+  
+.center-image {
+    position: absolute;              /* Take the image out of the normal flow */
+    top: 85%;                        /* Move the image to the center vertically */
+    left: 75%;                       /* Move the image to the center horizontally */
+    transform: translate(-50%, -50%); /* Offset the image by half its width and height */
+  }
+
+
+ul {
+    list-style-type: square; /* Options: circle, square, disc, none, etc. */
+  }
